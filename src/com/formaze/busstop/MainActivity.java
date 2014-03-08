@@ -1,13 +1,6 @@
 package com.formaze.busstop;
 
 import java.io.*;
-import java.net.URL;
-import java.net.URLEncoder;
-
-import org.apache.cxf.helpers.IOUtils;
-import org.apache.cxf.io.CachedOutputStream;
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserFactory;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -52,7 +45,7 @@ import android.widget.Toast;
 				ConnectPdata temp = new ConnectPdata();
 				
 				try {
-					getMsg = temp.run();
+					getMsg = temp.runCtyCodeList();
 					resultMsg += getMsg; 
 				} catch (Exception e) {
 					System.out.println("## 에러에러 ##");
