@@ -1,6 +1,9 @@
 package com.formaze.busstop;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -38,6 +41,8 @@ public class ConnectPdata {
 
 				//------------------------------------------------------------//
 				
+				String cityCodeName = new String();
+				
 				XmlPullParserFactory parserCreator = XmlPullParserFactory.newInstance();
 				XmlPullParser parser = parserCreator.newPullParser();
 				
@@ -50,30 +55,41 @@ public class ConnectPdata {
 				while (parserEvent != XmlPullParser.END_DOCUMENT) {
 					switch(parserEvent) {
 						case XmlPullParser.START_TAG:
+							String tag = parser.getName();
+							if(tag.compareTo("resultCode") == 0) {
+									String resultCode = parser.nextText();
+									System.out.println(" ###resultCode### :: " + resultCode);
+							}
+							
+							if(tag.compareTo("citycode") == 0) {
+								String resultCode1 = parser.nextText();
+								System.out.println(" ###citycode### :: " + resultCode1);
+							}
+							if(tag.compareTo("cityname") == 0) {
+								String cityname = parser.nextText();
+								System.out.println(" ###cityname### :: " + cityname);
+							}							
+							
+							
+						break;
+					}
+				
+					parserEvent = parser.next();
+				}
+					
+			
+						/*case XmlPullParser.START_TAG:
 						String tag = parser.getName();
 
 						if (tag.compareTo("resultCode") == 0){
-							String resultCode = parser.getAttributeValue(null, "resultCode");
-							System.out.println(" ###resultCode### :: " + resultCode);
-						}
-						if (tag.compareTo("resultMsg") == 0){
-							String resultMsg = parser.getAttributeValue(null, "resultMsg");
-							System.out.println(" ###resultMsg### :: " + resultMsg);
-						}
 
-						
-						if (tag.compareTo("citycode") == 0){
-							String citycode = parser.getAttributeValue(null, "citycode");
-							System.out.println(" ###citycode### :: " + citycode);
-						}
-						if (tag.compareTo("cityname") == 0){
-							String cityname = parser.getAttributeValue(null, "cityname");
-							System.out.println(" ###cityname### :: " + cityname);
+							String resultCode = parser.getAttributeValue(null, "tx");
+							System.out.println(" ###resultCode### :: " + resultCode);
 						}
 						break;
 					}
 					parserEvent = parser.next();
-				}
+				}*/
 				//-----------------------------------------------------------//
 
 				bos.close();

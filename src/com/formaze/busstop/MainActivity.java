@@ -55,16 +55,6 @@ import android.widget.Toast;
 			} else {
 				resultMsg = "버스번호가 4000번이 아니네요";
 			}
-				
-			try {
-				BufferedWriter writer = new BufferedWriter(new FileWriter("Test.xml"));
-				writer.write(getMsg);
-				writer.close();
-				
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 			
 			Toast.makeText(MainActivity.this, resultMsg, Toast.LENGTH_SHORT).show();
 				
