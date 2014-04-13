@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string-array name="city_name">
+  <item id="11">서울</item> 
+  <item id="21">부산</item> 
+  <item id="22">대구</item> 
+  <item id="23">인천</item> 
+  <item id="25">대전</item> 
+  <item id="26">울산</item> 
+  <item id="31">경기</item> 
+  <item id="39">제주</item> 
+  <item id="31250">광주</item> 
+  <item id="32010">춘천/홍천</item> 
+  <item id="32020">원주</item> 
+  <item id="33010">청주</item> 
+  <item id="34010">천안</item> 
+  <item id="34040">아산</item> 
+  <item id="35010">전주</item> 
+  <item id="35020">군산</item> 
+  <item id="36020">여수</item> 
+  <item id="36030">순천</item> 
+  <item id="36060">광양</item> 
+  <item id="37010">포항</item> 
+  <item id="37050">구미</item> 
+  <item id="37100">경산</item> 
+  <item id="38010">창원</item> 
+  <item id="38030">진주</item> 
+  <item id="38050">통영</item> 
+  <item id="38070">김해</item> 
+  <item id="38080">밀양</item> 
+  <item id="38090">거제</item> 
+  <item id="38100">양산</item> 
+</string-array>
+</resources>
