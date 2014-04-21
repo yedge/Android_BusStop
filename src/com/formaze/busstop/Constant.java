@@ -10,7 +10,7 @@ public static final String cityCode[] = {"11","21","22","23","25","26","31","39"
 public static final String openUrl_Dev = "http://openapi.tago.go.kr/openapi/service";
 public static final String functionLv1_BusRt = "BusLcInfoInqireService";
 public static final String functionLv2_BusRtPosition = "getRouteAcctoBusLcList";
-public static final String serviceKey_BusRt_Dev = "nQMV963b4xCHjoSLPmlm8%2Ba97NsKB3am7tv%2FitB4WVbAMAjnhtQCfIWimDj0rhO4FzPOpWbYg2NzorGtcWlSiQ%3D%3D&";
+public static final String serviceKey_BusRt_Dev = "hRUxCAsRrgYuNTi2DmMCM/OADts6RhuxyK6ZqS/EX9G4+YyhMONaFyfGrSWbn/3p/R6tnNmp4VS9V3RkYTtjZA==";
 public static final String serviceId_BusRt_Dev = "SC-OA-26-14";
 
 public static final String busRtPosition_outColNm[] = {"routeNm", "gpsLati", "gpsLong", "nodeOrd", "nodeNm", "nodeId", "routeTp"};

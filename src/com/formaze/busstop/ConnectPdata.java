@@ -6,6 +6,7 @@ import java.io.DataInputStream;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,25 +25,18 @@ import org.xmlpull.v1.XmlPullParserFactory;
 public class ConnectPdata {
 	
 	 public runGetRouteAcctoBusLcListIO runGetRouteAcctoBusLcList(String busId, String cityCd) {
-		//List list = new ArrayList();
-	    //HashMap outMap = new HashMap();
-	    
-	    //for(int i = 0; i<items.length(); i++) {
-	    //	outMap.get("gpsati", items.get(i).get("gpsati"));	    	
-	    	
-	    //	list.add(outMap);
-	    //}
-	    
-	    //Map aaa = (Map) list.get(0);
+
 		 cityCd = "25";
 		 busId = "DJB30300052ND";
+		 runGetRouteAcctoBusLcListIO outIo = new runGetRouteAcctoBusLcListIO();
+		 try {
 		/*** 호출 URL 구성 callUrl
 		 * URL : 공공 api호출 url(개발,운영구분) + 공공api서비스호출함수Lv1 + 공공api서비스호출함수Lv2
 		 * 헤더 : 서비스키(개발,운영구분) + 서비스아이디
 		 * 데이터 : 버스코드 busId + 지역코드 cityCd
 		 ***/
 		 String callAddr = Constant.openUrl_Dev + "/" + Constant.functionLv1_BusRt + "/" + Constant.functionLv2_BusRtPosition;
-		 String callHeader = "?ServiceKey=" + Constant.serviceKey_BusRt_Dev + "&id=" + Constant.serviceId_BusRt_Dev;
+		 String callHeader = "?ServiceKey=" + URLEncoder.encode(Constant.serviceKey_BusRt_Dev, "UTF-8") + "&id=" + Constant.serviceId_BusRt_Dev;
 		 String callData = "&cityCode=" + cityCd + "&routeId=" + busId;
 			System.out.println("callAddr :: " + callAddr);
 			System.out.println("callHeader :: " + callHeader);
@@ -52,7 +46,7 @@ public class ConnectPdata {
 		 * 헤더 : 결과코드
 		 * List : 노선번호, 맵매칭X좌표, 맵매칭Y좌표, 정류소 순서, 정류소명, 정류소ID, 노선유형
 		 ***/
-		 runGetRouteAcctoBusLcListIO outIo = new runGetRouteAcctoBusLcListIO();
+		 
 		 //결과코드
 		 String resultCode = "";
 		 //출력객체(리스트가 따로여도 인덱스를 순서대로 넣음)
@@ -65,7 +59,7 @@ public class ConnectPdata {
 		 List<String> routeTpList = new ArrayList<String>();
 		 //
 	    
-		    try {
+
 		
 				System.out.println("최종전송 :: " + callUrl);
 				
