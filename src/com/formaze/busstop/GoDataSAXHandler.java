@@ -46,8 +46,6 @@ public class GoDataSAXHandler extends DefaultHandler{
 	 */
 
 	public GoDataSAXHandler(String[] dataSetKey, Map resultInfo, String service) {
-		System.out.println("고데이터삭스핸들러");
-		//선언부
 		// 출력값가져갈 맵
 		dsetInfo = resultInfo;
 		// 데이터셋을 구성할 헤더
@@ -59,14 +57,12 @@ public class GoDataSAXHandler extends DefaultHandler{
 		for (int i=0;i<dset.length; i++) {
 			dsetInfo.put(dataSetKey[i], new ArrayList());
 		}
-		System.out.println("고데이터삭스핸들러데이터셋"+dsetInfo);
 	}
 
 	/**
 	 * XML Document [시작]
 	 */
 	 public void startDocument(){
-			System.out.println("문서처음!!!");
 		 value.setLength(0);	// 초기화
 	 }
 
@@ -74,7 +70,6 @@ public class GoDataSAXHandler extends DefaultHandler{
 	  * XML Document [끝]
 	  */
 	 public void endDocument(){
-			System.out.println("문서끝!!!");
 		 Iterator it = dsetInfo.keySet().iterator();
 
 		 /** 데이터셋의 데이터를 클라이언트 전송 **/
@@ -91,8 +86,8 @@ public class GoDataSAXHandler extends DefaultHandler{
 		 String code = resultCode.toString().trim();
 		 String msg = resultMsg.toString().trim();
 		 
-			 dsetInfo.put("resultCode",  code);
-			 dsetInfo.put("resultMsg",  msg);
+		 dsetInfo.put("resultCode",  code);
+		 dsetInfo.put("resultMsg",  msg);
 
 	 }
 
@@ -100,22 +95,15 @@ public class GoDataSAXHandler extends DefaultHandler{
 	  * 파싱할 엘리먼트 [시작]
 	  */
 	 public void startElement(String namespaceURI, String localName, String qName, Attributes attrs){
-			System.out.println("####스타트엘리먼트#### : "+namespaceURI+" : "+localName+" : "+qName+" : "+attrs);
 		 value.setLength(0);
-		 // ?
-		 System.out.println("dataset ::: "+dataset);
-		 System.out.println("record ::: "+record);
 		 if (dataset && record) {
 			 column = qName;
 			 tagName = "";
 		 } else {
 			 tagName = qName;
 		 }
-		 System.out.println("column ::: " + column);
-		 System.out.println("tagName ::: " + tagName);
 		 /** XML의 TAG가 데이터셋의 Key명칭과 일치하는지 판단 **/
 		 if (dsetInfo.containsKey(qName)) {
-			 System.out.println("dsetInfo.containsKey(qName) !!!");
 			 //ds에 해당컬럼에 데이터담는다 아마도 addrow
 			 ds = (List)dsetInfo.get(qName);
 			 dataset = true;
@@ -123,10 +111,7 @@ public class GoDataSAXHandler extends DefaultHandler{
 			 row = new HashMap();
 		 //헤더부
 		 } else if (serviceId.equals(qName)) {
-			 
-			 System.out.println("####스타트엘리먼트:전문시작부####"); 
 			 service = true;	// 고정부 시작.
-
 		 }
 	}
 
@@ -135,16 +120,13 @@ public class GoDataSAXHandler extends DefaultHandler{
 	  * - 데이터셋에 FirstRow가 적용되어 addDataRow하는 시점에 특정 레코드 갯수가 입력이되면 클라이언트로 먼저 전송
 	  */
 	 public void endElement(String namesapceURI, String localName, String qName){
-			System.out.println("엔드엘리먼트 : "+namesapceURI+" : "+localName+" : "+qName);
 		 if (dsetInfo.containsKey(qName)) {
-			 System.out.println("##qName이 헤더이름에 포함!##"+row);
 			 dataset = false;
 			 record = false;
 			 column = null;
 			 /** 컬럼이 끝이면 생성된 레코드를 데이터셋에 추가 **/
 			 ds.add(row);
 		 } else if (service && !record && tagName.equals(qName)) {
-			 System.out.println("???????????????");
 			 // 고정부에 대한 추가.
 			 if (fixDs != null) {
 				 fixRow.put(qName, value.toString());
@@ -169,40 +151,21 @@ public class GoDataSAXHandler extends DefaultHandler{
 	  * XML Element안의 Text를 파싱하여 담는 부분
 	  */
 	 public void characters(char[] ch, int start, int length){
-			System.out.println("캐릭터 : "+ch+" : "+start+" : "+length);
-			System.out.println("캐릭터스트링 : "+ new String(ch, start, length));
-			System.out.println("dataset : "+dataset + " record : " + record);
-			//tagName단일데이터 혹은 연쇄데이터시작 column연쇄데이터
+		//tagName단일데이터 혹은 연쇄데이터시작 column연쇄데이터
 		 if (dataset && record) {
-			 System.out.println("컬럼데이터적재 ok");
 			 String str = new String(ch, start, length);
 			 value.append(str);
 	     //이하는 단일데이터처리임 주로 헤더
 		//전문통신결과코드	 
 		 } else if ("resultCode".equals(tagName)) {
-			 System.out.println("resultCode 데이터인입!");
 			 String str = new String(ch, start, length);
 			 resultCode.append(str.trim());
 			 //전문통신결과메세지
 		 } else if ("resultMsg".equals(tagName)) {
-			 System.out.println("resultMsg 데이터인입!");
 			 String str = new String(ch, start, length);
 			 resultMsg.append(str.trim());
-
-		 //이하는 사용할수도안할수도
-//		 } else if ("messageCode".equals(tagName)) {
-//			 String str = new String(ch, start, length);
-//			 messageCode.append(str);
-//		 } else if ("messages".equals(tagName)) {
-//			 String str = new String(ch, start, length);
-//			 messages.append(str);
-//		 } else if ("traceMessage".equals(tagName)) {
-//			 String str = new String(ch, start, length);
-//			 traceMessage.append(str);
-			 
-			 //서비스시작됫고 반복부가 아닌 고정값 정해진 헤더외값들
+		 //서비스시작됫고 반복부가 아닌 고정값 정해진 헤더외값들
 		 } else if (service && !dataset) {
-			 System.out.println("service && !dataset 데이터인입!");
 			 String str = new String(ch, start, length);
 			 value.append(str.trim());
 		 }

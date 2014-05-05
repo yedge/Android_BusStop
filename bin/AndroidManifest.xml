@@ -23,6 +23,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.formaze.busstop.BusRtActivity"
+            android:label="@string/busrtlist_name">
+        </activity>
     </application>
 
 </manifest>

@@ -1,66 +1,45 @@
 package com.formaze.busstop;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.InputStream;
-import java.io.StringReader;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.apache.cxf.common.util.StringUtils;
 import org.apache.cxf.helpers.IOUtils;
 import org.apache.cxf.io.CachedOutputStream;
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlPullParserFactory;
 
 public class ConnectPdata {
 	
-	 public runGetRouteAcctoBusLcListIO runGetRouteAcctoBusLcList(String busId, String cityCd) {
+	 /**
+	  * 도시코드와 버스번호로 버스정보를 조회한다
+	  **/
+	 public ConnectPdataIO runGetRouteNoList(String busNum, String cityCd) {
 
-		 cityCd = "25";
-		 busId = "DJB30300052ND";
-		 runGetRouteAcctoBusLcListIO outIo = new runGetRouteAcctoBusLcListIO();
+		 ConnectPdataIO outIo = new ConnectPdataIO();
+
 		 try {
 		/*** 호출 URL 구성 callUrl
 		 * URL : 공공 api호출 url(개발,운영구분) + 공공api서비스호출함수Lv1 + 공공api서비스호출함수Lv2
 		 * 헤더 : 서비스키(개발,운영구분) + 서비스아이디
-		 * 데이터 : 버스코드 busId + 지역코드 cityCd
+		 * 데이터 : 버스번호 busNum + 지역코드 cityCd
 		 ***/
-		 String callAddr = Constant.openUrl_Dev + "/" + Constant.functionLv1_BusRt + "/" + Constant.functionLv2_BusRtPosition;
-		 String callHeader = "?ServiceKey=" + URLEncoder.encode(Constant.serviceKey_BusRt_Dev, "UTF-8") + "&id=" + Constant.serviceId_BusRt_Dev;
-		 String callData = "&cityCode=" + cityCd + "&routeId=" + busId;
+		 String callAddr = Constant.openUrl_Dev + "/" + Constant.functionLv1_BusInfo + "/" + Constant.functionLv2_BusInfoList;
+		 String callHeader = "?ServiceKey=" + URLEncoder.encode(Constant.serviceKey_Bus_Dev, "UTF-8") + "&id=" + Constant.serviceId_BusInfo_Dev;
+		 String callData = "&cityCode=" + cityCd + "&routeNo=" + busNum;
 			System.out.println("callAddr :: " + callAddr);
 			System.out.println("callHeader :: " + callHeader);
 			System.out.println("callData :: " + callData);
 		 String callUrl = callAddr + callHeader + callData;
 		/*** 함수출력대상 outIo
 		 * 헤더 : 결과코드
-		 * List : 노선번호, 맵매칭X좌표, 맵매칭Y좌표, 정류소 순서, 정류소명, 정류소ID, 노선유형
+		 * List : 노선ID, 노선번호, 노선유형, 종점, 기점, 막차시간, 첫차시간
 		 ***/
-		 
-		 //결과코드
-		 String resultCode = "";
-		 //출력객체(리스트가 따로여도 인덱스를 순서대로 넣음)
-		 List<String> routeNmList = new ArrayList<String>();
-		 List<String> gpsLatiList = new ArrayList<String>();
-		 List<String> gpsLongList = new ArrayList<String>();
-		 List<String> nodeOrdList = new ArrayList<String>();
-		 List<String> nodeNmList = new ArrayList<String>();
-		 List<String> nodeIdList = new ArrayList<String>();
-		 List<String> routeTpList = new ArrayList<String>();
-		 //
-	    
-
-		
 				System.out.println("최종전송 :: " + callUrl);
 				
 				URL url = new URL(callUrl);
@@ -74,79 +53,229 @@ public class ConnectPdata {
 				
 				in.close();
 
-				System.out.println("원천결과 :: "+bos.getOut().toString());
-
 				//------------------------------------------------------------//
-
 				
 				SAXParserFactory factory = SAXParserFactory.newInstance();
 				SAXParser parser = factory.newSAXParser();
 				
 				Map<String, Object> result = new HashMap<String, Object>();
-				System.out.println("파서선언");
-				GoDataSAXHandler saxHandler = new GoDataSAXHandler(Constant.busRtPosition_outColNm, result , "response");
+				ArrayList list = new ArrayList();
+				String[] outColNm = {"item"};
+				
+				GoDataSAXHandler saxHandler = new GoDataSAXHandler(outColNm, result , "response");
+
 				// 전문 XML을 Parser를 사용하여 파싱
 				DataInputStream dis= new DataInputStream(bos.getInputStream());
-				System.out.println("파서진입합니당");
 				parser.parse(dis, saxHandler);
+				//------------------------------------------------------------//
+				bos.close();
+
+				System.out.println("가지고온맵 :: " + result);
+
+				//결과값 셋팅
+				String resultCode = (String) result.get("resultCode");
+
+//				<tr>
+//					<td>라우트타입</td>
+//					<td>라티</td>
+//				</tr>
+//<%
+				ArrayList<BusInfoListBean> busInfoList = new ArrayList<BusInfoListBean>();
+				BusInfoListBean infoBean = new BusInfoListBean();
+				list = (ArrayList) result.get("item");
+				for(int i=0; i<list.size(); i++) {					
+					Map<String, Object> itemMap = new HashMap<String, Object>();
+					itemMap = (Map) list.get(i);
+					infoBean = new BusInfoListBean();
+					infoBean.setRouteNo(itemMap.get("routeNo").toString());
+					infoBean.setRouteId(itemMap.get("routeId").toString());
+					infoBean.setStartNodeNm(itemMap.get("startNodeNm").toString());
+					infoBean.setEndNodeNm(itemMap.get("endNodeNm").toString());
+					infoBean.setCityCode(itemMap.get("cityCode").toString());
+					busInfoList.add(infoBean);
+//%>
+//					<tr>
+//						<td><%=itemMap.get("routeType")%></td>
+//						<td><%=itemMap.get("gpslati")%></td>
+//					</tr>
+//<%
+					System.out.println("가지고온맵 ("+i+"):: " + itemMap);										
+				}
+//%>
+				outIo.setResultCode(resultCode);
+				outIo.setBusInfoList(busInfoList);
+		 } catch (Exception e) {
+		    	e.printStackTrace();
+		    	System.out.println("에러메세지"+e.getMessage().toString());
+		 } finally {
+			 
+		 }
+		    return outIo;
+    }
+
+    /**
+	 * 도시코드와 버스아이디로 버스실시간정보를 조회한다
+	 **/
+	public ConnectPdataIO runGetRouteAcctoBusLcList(String busId, String cityCd) {
+
+		 ConnectPdataIO outIo = new ConnectPdataIO();
+
+		 try {
+		/*** 호출 URL 구성 callUrl
+		 * URL : 공공 api호출 url(개발,운영구분) + 공공api서비스호출함수Lv1 + 공공api서비스호출함수Lv2
+		 * 헤더 : 서비스키(개발,운영구분) + 서비스아이디
+		 * 데이터 : 버스코드 busId + 지역코드 cityCd
+		 ***/
+		 String callAddr = Constant.openUrl_Dev + "/" + Constant.functionLv1_BusRt + "/" + Constant.functionLv2_BusRtPosition;
+		 String callHeader = "?ServiceKey=" + URLEncoder.encode(Constant.serviceKey_Bus_Dev, "UTF-8") + "&id=" + Constant.serviceId_BusRt_Dev;
+		 String callData = "&cityCode=" + cityCd + "&routeId=" + busId;
+			System.out.println("callAddr :: " + callAddr);
+			System.out.println("callHeader :: " + callHeader);
+			System.out.println("callData :: " + callData);
+		 String callUrl = callAddr + callHeader + callData;
+		/*** 함수출력대상 outIo
+		 * 헤더 : 결과코드
+		 * List : 노선번호, 맵매칭X좌표, 맵매칭Y좌표, 정류소 순서, 정류소명, 정류소ID, 노선유형
+		 ***/
+				System.out.println("최종전송 :: " + callUrl);
 				
+				URL url = new URL(callUrl);
+				
+				InputStream in = url.openStream();
+				
+
+				CachedOutputStream bos = new CachedOutputStream();
+				
+				IOUtils.copy(in, bos);
+				
+				in.close();
+
+				//------------------------------------------------------------//
+				
+				SAXParserFactory factory = SAXParserFactory.newInstance();
+				SAXParser parser = factory.newSAXParser();
+				
+				Map<String, Object> result = new HashMap<String, Object>();
+				ArrayList list = new ArrayList();
+				String[] outColNm = {"item"};
+				
+				GoDataSAXHandler saxHandler = new GoDataSAXHandler(outColNm, result , "response");
 
 				// 전문 XML을 Parser를 사용하여 파싱
-				
-				
+				DataInputStream dis= new DataInputStream(bos.getInputStream());
+				parser.parse(dis, saxHandler);
 				//------------------------------------------------------------//
-
-				
-				
-//				XmlPullParserFactory parserCreator = XmlPullParserFactory.newInstance();
-//				XmlPullParser parser = parserCreator.newPullParser();
-//				
-//				parser.setInput(bos.getInputStream(), null);
-//				
-//				int parserEvent = parser.getEventType();
-//				
-//				System.out.println(" 파서이벤트 :: "+parserEvent);
-//				boolean itemFlag = false;		
-//				while (parserEvent != XmlPullParser.END_DOCUMENT) {
-//					switch(parserEvent) {
-//						case XmlPullParser.START_TAG:
-//							String tag = parser.getName();
-//							
-//							//헤더파싱
-//							if(tag.compareTo("resultCode") == 0) {
-//									resultCode = parser.nextText();
-//									System.out.println(" ###resultCode### :: " + resultCode);
-//									if (!"00".equals(resultCode)) {
-//										System.out.println(" ###전문결과비정상###");
-//										return outIo;
-//									}
-//							}
-//							
-//							//데이터파싱
-//							if (tag.compareTo("items") == 0) {
-//								itemFlag = true;
-//							}
-//							
-//							String[] outDataColList = Constant.busRtPosition_outColNm; 
-//							for (int i=0; i < outDataColList.length; i++) {
-//								if(tag.compareTo(outDataColList[i]) == 0) {
-//									String resultCode1 = parser.nextText();
-//									System.out.println(" ###citycode### :: " + resultCode1);
-//								}
-//							}
-//
-//						break;
-//					}
-//				
-//					parserEvent = parser.next();
-//				}
-					
-
 				bos.close();
-//		    } catch (XmlPullParserException e) {
-//				e.printStackTrace();
-//				System.out.println("풀파서에러 :: "+e.getMessage().toString());
-		    } catch (Exception e) {
+
+				System.out.println("가지고온맵 :: " + result);
+				//결과값 셋팅
+				String resultCode = (String) result.get("resultCode");
+
+				ArrayList<BusRtListBean> busRtList = new ArrayList<BusRtListBean>();
+				BusRtListBean rtBean = new BusRtListBean();
+				list = (ArrayList) result.get("item");
+				for(int i=0; i<list.size(); i++) {					
+					Map<String, Object> itemMap = new HashMap<String, Object>();
+					itemMap = (Map) list.get(i);
+					rtBean = new BusRtListBean();
+					rtBean.setNodeOrd(itemMap.get("nodeOrd").toString());
+					rtBean.setNodeNm(itemMap.get("nodeNm").toString());
+					rtBean.setRouteTp(itemMap.get("routeTp").toString());
+					rtBean.setNodeId(itemMap.get("nodeId").toString());
+					rtBean.setGpsLati(itemMap.get("gpsLati").toString());
+					rtBean.setGpsLong(itemMap.get("gpsLong").toString());
+					busRtList.add(rtBean);
+
+					System.out.println("가지고온맵 ("+i+"):: " + itemMap);										
+				}
+				outIo.setResultCode(resultCode);
+				outIo.setBusRtList(busRtList);
+				
+		 } catch (Exception e) {
+		    	e.printStackTrace();
+		    	System.out.println("에러메세지"+e.getMessage().toString());
+		    } finally {
+			}
+		    return outIo;
+    }
+	
+    /**
+	 * 도시코드와 버스아이디로 버스정류소정보를 조회한다
+	 **/
+	public ConnectPdataIO runGetRouteAcctoThrghSttnList(String busId, String cityCd) {
+
+		 ConnectPdataIO outIo = new ConnectPdataIO();
+
+		 try {
+		/*** 호출 URL 구성 callUrl
+		 * URL : 공공 api호출 url(개발,운영구분) + 공공api서비스호출함수Lv1 + 공공api서비스호출함수Lv2
+		 * 헤더 : 서비스키(개발,운영구분) + 서비스아이디
+		 * 데이터 : 버스코드 busId + 지역코드 cityCd
+		 ***/
+		 String callAddr = Constant.openUrl_Dev + "/" + Constant.functionLv1_BusRt + "/" + Constant.functionLv2_BusSttnList;
+		 String callHeader = "?ServiceKey=" + URLEncoder.encode(Constant.serviceKey_Bus_Dev, "UTF-8") + "&id=" + Constant.serviceId_BusRt_Dev;
+		 String callData = "&cityCode=" + cityCd + "&routeId=" + busId;
+			System.out.println("callAddr :: " + callAddr);
+			System.out.println("callHeader :: " + callHeader);
+			System.out.println("callData :: " + callData);
+		 String callUrl = callAddr + callHeader + callData;
+		/*** 함수출력대상 outIo
+		 * 헤더 : 결과코드
+		 * List : 노선ID, 정류소ID, 정류소명, 정류소 순번
+		 ***/
+				System.out.println("최종전송 :: " + callUrl);
+				
+				URL url = new URL(callUrl);
+				
+				InputStream in = url.openStream();
+				
+
+				CachedOutputStream bos = new CachedOutputStream();
+				
+				IOUtils.copy(in, bos);
+				
+				in.close();
+
+				//------------------------------------------------------------//
+				
+				SAXParserFactory factory = SAXParserFactory.newInstance();
+				SAXParser parser = factory.newSAXParser();
+				
+				Map<String, Object> result = new HashMap<String, Object>();
+				ArrayList list = new ArrayList();
+				String[] outColNm = {"item"};
+				
+				GoDataSAXHandler saxHandler = new GoDataSAXHandler(outColNm, result , "response");
+
+				// 전문 XML을 Parser를 사용하여 파싱
+				DataInputStream dis= new DataInputStream(bos.getInputStream());
+				parser.parse(dis, saxHandler);
+				//------------------------------------------------------------//
+				bos.close();
+
+				System.out.println("가지고온맵 :: " + result);
+				//결과값 셋팅
+				String resultCode = (String) result.get("resultCode");
+
+				ArrayList<BusSttnListBean> busSttnList = new ArrayList<BusSttnListBean>();
+				BusSttnListBean sttnBean = new BusSttnListBean();
+				list = (ArrayList) result.get("item");
+				for(int i=0; i<list.size(); i++) {					
+					Map<String, Object> itemMap = new HashMap<String, Object>();
+					itemMap = (Map) list.get(i);
+					sttnBean = new BusSttnListBean();
+					sttnBean.setNodeOrd(itemMap.get("nodeOrd").toString());
+					sttnBean.setNodeNm(itemMap.get("nodeNm").toString());
+					sttnBean.setNodeId(itemMap.get("nodeId").toString());
+					sttnBean.setRouteId(itemMap.get("routeId").toString());
+					busSttnList.add(sttnBean);
+
+					System.out.println("가지고온맵 ("+i+"):: " + itemMap);										
+				}
+				outIo.setResultCode(resultCode);
+				outIo.setBusSttnList(busSttnList);
+				
+		 } catch (Exception e) {
 		    	e.printStackTrace();
 		    	System.out.println("에러메세지"+e.getMessage().toString());
 		    } finally {
