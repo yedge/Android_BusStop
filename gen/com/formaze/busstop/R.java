@@ -27,10 +27,11 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
+        public static final int TableRow01=0x7f090002;
         public static final int action_settings=0x7f09000e;
         public static final int btn_busSrch=0x7f090005;
         public static final int busNum=0x7f090004;
-        public static final int cityNm=0x7f090002;
+        public static final int cityNm=0x7f090003;
         public static final int endNodeNm=0x7f09000c;
         public static final int list_busCp=0x7f090000;
         public static final int list_busInfo=0x7f090006;
@@ -41,7 +42,6 @@ public final class R {
         public static final int routeNo=0x7f09000a;
         public static final int routeTp=0x7f09000d;
         public static final int startNodeNm=0x7f09000b;
-        public static final int tbl_busNum=0x7f090003;
     }
     public static final class layout {
         public static final int activity_buscplist=0x7f030000;

@@ -1,32 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
-
+	<TableRow android:id="@+id/TableRow01">
     <TextView
     android:id="@+id/routeNo"
-    android:layout_width="100dp"
-    android:layout_height="100dp"
+    android:layout_width="80dip"
+    android:layout_height="wrap_content"
     android:textSize="20sp"
-    android:layout_alignParentLeft="true"
     />
 
     <TextView
     android:id="@+id/startNodeNm"
-    android:layout_width="wrap_content"
+    android:layout_width="100dip"
     android:layout_height="wrap_content"
     android:textSize="20sp"
-    android:layout_alignParentTop="true"
-    android:layout_toRightOf="@id/routeNo"
     />
     
     <TextView
     android:id="@+id/endNodeNm"
-    android:layout_width="wrap_content"
+    android:layout_width="100dip"
     android:layout_height="wrap_content"
     android:textSize="20sp"
-    android:layout_below="@id/startNodeNm"
-    android:layout_toRightOf="@id/startNodeNm"
     />
-    
-</RelativeLayout>
+    </TableRow>
+</TableLayout>

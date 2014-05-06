@@ -7,7 +7,7 @@
     android:id="@+id/nodeOrd"
     android:layout_width="100dp"
     android:layout_height="100dp"
-    android:textSize="20sp"
+    android:textSize="15sp"
     android:layout_alignParentLeft="true"
     />
 
@@ -15,7 +15,7 @@
     android:id="@+id/nodeNm"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:textSize="20sp"
+    android:textSize="15sp"
     android:layout_alignParentTop="true"
     android:layout_toRightOf="@id/nodeOrd"
     />
@@ -26,7 +26,7 @@
     android:layout_height="wrap_content"
     android:textSize="20sp"
     android:layout_below="@id/nodeNm"
-    android:layout_toRightOf="@id/nodeNm"
+    android:textColor="#0054FF"
     />
     
 </RelativeLayout>
