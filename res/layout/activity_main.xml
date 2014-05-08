@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"/>
     <EditText
     	android:id="@+id/busNum"
-        android:layout_width="100dip"
+        android:layout_width="160dip"
         android:layout_height="wrap_content"
         android:hint="번호입력"
         android:lines="1" />
@@ -26,7 +26,9 @@
         android:layout_height="wrap_content"
         android:text="조회" />
 	</TableRow>
-	
+	<TableRow android:id="@+id/TableRow02">
+	</TableRow>
+
 <LinearLayout android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
@@ -34,7 +36,9 @@
     <ListView
     	android:id="@+id/list_busInfo"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:divider="#BDBDBD"
+        android:dividerHeight="1dip" />
 
 </LinearLayout>
 

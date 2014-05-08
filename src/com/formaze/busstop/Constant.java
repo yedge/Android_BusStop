@@ -13,8 +13,9 @@ public static final String functionLv1_BusRt = "BusLcInfoInqireService";
 public static final String functionLv1_BusInfo = "BusRouteInfoInqireService";
 
 public static final String functionLv2_BusRtPosition = "getRouteAcctoBusLcList";
-public static final String functionLv2_BusInfoList = "getRouteNoList";
+public static final String functionLv2_BusNoList = "getRouteNoList";
 public static final String functionLv2_BusSttnList = "getRouteAcctoThrghSttnList";
+public static final String functionLv2_RouteInfoList = "getRouteInfoIem";
 
 public static final String serviceKey_Bus_Dev = "hRUxCAsRrgYuNTi2DmMCM/OADts6RhuxyK6ZqS/EX9G4+YyhMONaFyfGrSWbn/3p/R6tnNmp4VS9V3RkYTtjZA==";
 //인코딩 : hRUxCAsRrgYuNTi2DmMCM%2FOADts6RhuxyK6ZqS%2FEX9G4%2BYyhMONaFyfGrSWbn%2F3p%2FR6tnNmp4VS9V3RkYTtjZA%3D%3D
@@ -23,6 +24,7 @@ public static final String serviceId_BusRt_Dev = "SC-OA-26-14";
 
 public static final String msg_busCd_empty = "버스번호를 입력해 주십시오.";
 public static final String msg_busListRslt_empty = "버스 조회결과가 존재하지 않습니다.";
+public static final String msg_infoListRslt_empty = "버스기본정보 조회결과가 존재하지 않습니다.";
 public static final String msg_sttnListRslt_empty = "버스정류소 조회결과가 존재하지 않습니다.";
 public static final String msg_rtListRslt_empty = "버스실시간정보 조회결과가 존재하지 않습니다.";
 public static final String msg_busCp_ok = "버스가 이곳을 지나가고 있습니다.";

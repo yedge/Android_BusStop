@@ -5,9 +5,11 @@ import java.util.ArrayList;
 public class ConnectPdataIO {
 
 	String resultCode;
+	
 	ArrayList<BusInfoListBean> busInfoList = new ArrayList<BusInfoListBean>();
 	ArrayList<BusRtListBean> busRtList = new ArrayList<BusRtListBean>();
 	ArrayList<BusSttnListBean> busSttnList = new ArrayList<BusSttnListBean>();
+	ArrayList<RouteInfoListBean> routeInfoList = new ArrayList<RouteInfoListBean>();
 	
 	public String getResultCode() {
 		return resultCode;
@@ -39,6 +41,14 @@ public class ConnectPdataIO {
 
 	public void setBusSttnList(ArrayList<BusSttnListBean> busSttnList) {
 		this.busSttnList = busSttnList;
+	}
+
+	public ArrayList<RouteInfoListBean> getRouteInfoList() {
+		return routeInfoList;
+	}
+
+	public void setRouteInfoList(ArrayList<RouteInfoListBean> routeInfoList) {
+		this.routeInfoList = routeInfoList;
 	}
 
 }

@@ -19,6 +19,7 @@ public class busInfoListAdapter extends BaseAdapter {
 	int layout;
 
 	public busInfoListAdapter(Context context, int layout, ArrayList<BusInfoListBean> items){
+		
 		this.context = context;
 		this.items = items;
 		layoutInflater = (LayoutInflater)context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
